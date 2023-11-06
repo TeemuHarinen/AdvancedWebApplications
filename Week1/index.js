@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
   // loops through breeds list creating a new html element for each
   for (let i = 0; i < 5; i++) {
