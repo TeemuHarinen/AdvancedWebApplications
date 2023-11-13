@@ -14,7 +14,6 @@ app.get('/', (req, res) => {
 app.post('/list', (req, res) => {
   const text = req.body.text;
   wordList.push(text);
-  console.log(wordList)
   const obj = {
     list: wordList
   }

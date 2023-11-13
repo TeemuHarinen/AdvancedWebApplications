@@ -1,0 +1,79 @@
+extends layout
+
+block content
+  h1= todos
+  p Welcome to #{title}
+  form(id="todoForm")
+    label(for="input-name") Name:
+    input(type="text" id="input-name" name="name" placeholder="Enter your name" required)
+    br
+    label(for="input-task") Task:
+    input(type="text" id="input-task" name="task" placeholder="Enter a new task" required)
+    br
+    br
+    button(type="button" id="submit-data") Add Task
+    br
+    br
+  form(id="searchForm") Search tasks by name
+    input(type="text" id="search-name" placeholder="Enter name" required)
+    br
+    br
+    button(type="button" id="search") Search
+    div(id="user-display")
+
+
+  script.
+    document.getElementById('submit-data').addEventListener('click', function() {
+      const name = document.getElementById('input-name').value;
+      const task = document.getElementById('input-task').value;
+
+      // Sends data to the server using fetch
+      fetch('/todo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, task }),
+      })
+      .then(response => response.text())
+      .then(message => {
+        // Displays the response message
+        alert(message);
+        // Refresh the page to see the updated data
+        location.reload();
+      })
+      .catch(error => console.error('Error:', error));
+    });
+
+  script.
+    document.getElementById('search').addEventListener('click', function() {
+      const searchName = document.getElementById('search-name').value
+
+      fetch(`/users/${searchName}`)
+      .then(response => response.json())
+      .then(user => {
+        console.log(user)
+        const userDisplay = document.getElementById('user-display')
+        userDisplay.innerHTML = ''
+
+        if (user.name) {
+          const userName = document.createElement('p');
+          userName.textContent = `Name: ${user.name}`;
+          userDisplay.appendChild(userName);
+
+          const userTodos = document.createElement('ul');
+          user.todos.forEach(todo => {
+            const todoItem = document.createElement('li');
+            todoItem.textContent = todo;
+            userTodos.appendChild(todoItem);
+          });
+          userDisplay.appendChild(userTodos);
+          
+        } else {
+          const notFoundMessage = document.createElement('p');
+          notFoundMessage.textContent = 'User not found';
+          userDisplay.appendChild(notFoundMessage);
+        }
+      })
+      .catch(error => console.error('Error:', error));
+    })
