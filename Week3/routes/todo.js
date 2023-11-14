@@ -6,7 +6,7 @@ let users = []
 router.post('/', function(req, res, next) {
   const { name, task } = req.body
   const existingUser = users.find(user => user.name === name)
-  console.log(existingUser)
+  
   if (existingUser) {
     existingUser.todos.push(task);
     res.send('Todo added');
@@ -16,7 +16,6 @@ router.post('/', function(req, res, next) {
     users.push(newUser);
     res.send('User added');
   }
-  console.log(users)
 })
 
 

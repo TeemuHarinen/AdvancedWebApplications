@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-let users = [{ name: 'Teme', todos: ['Töihin']}]
+let users = []
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -25,7 +25,7 @@ router.post('/todo', function(req, res, next) {
   console.log(users)
 })
 
-router.get('/users/:id', function(req, res, next) {
+router.get('/user/:id', function(req, res, next) {
   const { id } = req.params
   // Finds the user based on id
   const user = users.find(user => user.name.toLowerCase() === id.toLowerCase());
@@ -33,8 +33,20 @@ router.get('/users/:id', function(req, res, next) {
   if (user) {
     res.json(user)
   } else {
-    res.status(404).json({error: 'User not found'})
+    res.status(404).json({ error: 'User not found' })
   }
 });
+
+router.delete('/user/:id', function(req, res, next) {
+  const { id } = req.params
+  const userToDelete = users.find(user => user.name.toLowerCase() === id.toLowerCase());
+  
+  if (userToDelete) {
+    users = users.filter(user => user !== userToDelete)
+    res.json({ users: users, message: "User deleted"})
+  } else {
+    res.status(404).json({ error: 'User not found '})
+  }
+})
 
 module.exports = router;

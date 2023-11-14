@@ -6,14 +6,11 @@ var router = express.Router();
 router.get('/:id', function(req, res, next) {
   const { id } = req.params
   // Finds the user based on id
-  console.log("Sucess")
-  console.log(users)
   const user = users.find(user => user.name.toLowerCase() === id.toLowerCase())
-
   if (user) {
     res.json(user)
   } else {
-    res.status(404).send('User not found')
+    res.status(404).json({ message: 'User not found' })
   }
 });
 

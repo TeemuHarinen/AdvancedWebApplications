@@ -3,6 +3,7 @@ extends layout
 block content
   h1= todos
   p Welcome to #{title}
+  div(id="message-container")
   form(id="todoForm")
     label(for="input-name") Name:
     input(type="text" id="input-name" name="name" placeholder="Enter your name" required)
@@ -20,6 +21,7 @@ block content
     br
     button(type="button" id="search") Search
     div(id="user-display")
+    button(type="button" id="delete-user" style="display:none") Delete
 
 
   script.
@@ -38,9 +40,9 @@ block content
       .then(response => response.text())
       .then(message => {
         // Displays the response message
-        alert(message);
-        // Refresh the page to see the updated data
-        location.reload();
+        const msgContainer = document.getElementById('message-container')
+        msgContainer.textContent = message.toString()
+        
       })
       .catch(error => console.error('Error:', error));
     });
@@ -48,8 +50,9 @@ block content
   script.
     document.getElementById('search').addEventListener('click', function() {
       const searchName = document.getElementById('search-name').value
+      const deleteButton = document.getElementById('delete-user')
 
-      fetch(`/users/${searchName}`)
+      fetch(`/user/${searchName}`)
       .then(response => response.json())
       .then(user => {
         console.log(user)
@@ -58,18 +61,21 @@ block content
 
         if (user.name) {
           const userName = document.createElement('p');
-          userName.textContent = `Name: ${user.name}`;
+          userName.textContent = `${user.name}`;
           userDisplay.appendChild(userName);
 
           const userTodos = document.createElement('ul');
+          // Loops through elements - creating a new list element for each
           user.todos.forEach(todo => {
             const todoItem = document.createElement('li');
             todoItem.textContent = todo;
             userTodos.appendChild(todoItem);
           });
           userDisplay.appendChild(userTodos);
-          
+          deleteButton.style.display = "inline"
+
         } else {
+          deleteButton.style.display = "none"
           const notFoundMessage = document.createElement('p');
           notFoundMessage.textContent = 'User not found';
           userDisplay.appendChild(notFoundMessage);
@@ -77,3 +83,31 @@ block content
       })
       .catch(error => console.error('Error:', error));
     })
+
+  script.
+    document.getElementById('delete-user').addEventListener('click', async function() {
+      const user = document.getElementById('user-display')
+      const username = user.firstChild.textContent
+      const deleteButton = document.getElementById('delete-user')
+
+      await fetch(`/user/${username}`, {
+        method: 'DELETE'
+      })
+      .then(response => response.json())
+      .then(data => {
+        const msgContainer = document.getElementById('message-container')
+        if (data.users) {
+          msgContainer.textContent = data.message
+          const userDisplay = document.getElementById('user-display')
+          userDisplay.innerHTML = ''
+
+        } else {
+          msgContainer.textContent = data.error
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      })
+      deleteButton.style.display = "none"
+      }
+      );
