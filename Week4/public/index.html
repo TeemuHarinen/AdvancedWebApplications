@@ -1,0 +1,57 @@
+<html>
+
+<head>
+  <title>Recipe app</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.js"></script>
+</head>
+
+<body>
+  <nav>
+    <div class="nav-wrapper">
+      <a href="#!" class="brand-logo">Recipe app</a>
+      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="sass.html">Sass</a></li>
+        <li><a href="badges.html">Components</a></li>
+        <li><a href="collapsible.html">Javascript</a></li>
+        <li><a href="mobile.html">Mobile</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <ul class="sidenav" id="mobile-demo">
+    <li><a href="sass.html">Sass</a></li>
+    <li><a href="badges.html">Components</a></li>
+    <li><a href="collapsible.html">Javascript</a></li>
+    <li><a href="mobile.html">Mobile</a></li>
+  </ul>
+
+  <div class="container">
+  <div id="recipe-display" class="col"></div>
+    <div class="col">
+    <input type="text" id="name-text">
+    <h4>Ingredients</h4> 
+    <textarea id="ingredients-text"></textarea>
+    <button id="add-ingredient" type="button" class="btn">Add ingredient</button>
+    <h4>instructions</h4> 
+    <textarea id="instructions-text"></textarea>
+    <button id="add-instruction" type="button" class="btn">Add instruction</button>
+    <br/>
+    <br/>
+    <form id="image-form">
+     <label for="image-input">Choose Image(s):</label>
+      <input type="file" id="image-input" name="images" accept="image/*" multiple>
+    </form>
+    <button id="submit" type="submit" class="btn">Submit</button>
+    <script src="javascripts/script.js"></script>
+    </div>
+  </div>
+</body>
+
+</html>

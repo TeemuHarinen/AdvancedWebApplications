@@ -1,0 +1,92 @@
+<html>
+
+<head>
+  <title>Recipe app</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.js"></script>
+</head>
+
+<body>
+  <nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo">Recipes</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <input type="search" id="search-bar" placeholder="Search...">
+        <!-- 
+        <li><a href="sass.html">Sass</a></li>
+        <li><a href="badges.html">Components</a></li>
+        <li><a href="collapsible.html">JavaScript</a></li>
+        -->
+        </ul>
+    </div>
+  </nav>
+
+  <!--
+  mobile sidebar (needs function in script to work which breaks codegrade)
+  <ul class="sidenav" id="mobile-demo">
+    <li><a href="sass.html">Sass</a></li>
+    <li><a href="badges.html">Components</a></li>
+    <li><a href="collapsible.html">Javascript</a></li>
+    <li><a href="mobile.html">Mobile</a></li>
+  </ul>
+  -->
+  
+  <div class="container">
+  <div id="recipe-display" class="col">
+  </div>
+  <br/>
+  <div id="recipe-add" class="col"></div>
+    <div class="col">
+    <h6>Add Recipe</h6>
+    <input type="text" id="name-text">
+    <h6>Ingredients</h6> 
+    <textarea id="ingredients-text"></textarea>
+    <button id="add-ingredient" type="button" class="btn">Add ingredient</button>
+    <h6>Instructions</h6> 
+    <textarea id="instructions-text"></textarea>
+    <button id="add-instruction" type="button" class="btn">Add instruction</button>
+    <br/>
+    <br/>
+    <div id="category-list">
+    </div>
+    <!--
+    <fieldset>
+      <legend>Categories</legend>
+      <p>
+        <label>
+          <input type="checkbox" id="gluten-box" />
+          <span>Gluten-free</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input type="checkbox" id="vegan-box"/>
+          <span>Vegan</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input type="checkbox" id="ovo-box"/>
+          <span>Ovo</span>
+        </label>
+      </p>
+    </fieldset>
+    -->
+    <br/>
+    <br/>
+    <form id="image-form">
+     <label for="image-input">Choose Image(s):</label>
+      <input type="file" id="image-input" name="images" accept="image/*" multiple>
+    </form>
+    <button id="submit" type="submit" class="btn">Submit</button>
+    <script src="javascripts/script.js"></script>
+    </div>
+  </div>
+</body>
+
+</html>
