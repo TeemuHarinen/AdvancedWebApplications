@@ -6,7 +6,8 @@ let recipeSchema = new Schema({
     name: String,
     ingredients:[],
     instructions:[],
-    categories: []
+    categories: [],
+    images: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Image' }]
 })
 
 module.exports = mongoose.model("Recipe", recipeSchema)

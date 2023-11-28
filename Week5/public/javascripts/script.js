@@ -10,14 +10,12 @@ document.getElementById('add-ingredient').addEventListener('click', () => {
   let text = document.getElementById('ingredients-text').value
   ingredients.push(text)
   document.getElementById('ingredients-text').value = ''
-  console.log(ingredients)
 })
 
 document.getElementById('add-instruction').addEventListener('click', () => {
   const text = document.getElementById('instructions-text').value
   instructions.push(text)
   document.getElementById('instructions-text').value = ''
-  console.log(instructions)
 })
 
 document.getElementById('search-bar').addEventListener('keypress', (event) => {
@@ -32,15 +30,14 @@ document.getElementById('search-bar').addEventListener('keypress', (event) => {
   .then(response => response.json())
   .then(recipe => {
     if (recipe) { 
-      console.log("Fetched recipe:", recipe)
       const recipeName = document.createElement('h3')
       const ingredientsHeader = document.createElement('h5')
       ingredientsHeader.innerHTML = 'Ingredients'
       // Creates unordered list of ingredients
       const ingredients = document.createElement('ul')
-      for (let i = 0; i < recipe[0].ingredients.length; i++) {
+      for (let i = 0; i < recipe.ingredients.length; i++) {
         const element = document.createElement('li')
-        element.innerHTML = recipe[0].ingredients[i].toString()
+        element.innerHTML = recipe.ingredients[i].toString()
         ingredients.appendChild(element)
       }
 
@@ -48,13 +45,16 @@ document.getElementById('search-bar').addEventListener('keypress', (event) => {
       const instructionsHeader = document.createElement('h5')
       instructionsHeader.innerHTML = 'Instructions'
       const instructions = document.createElement('ul')
-      for (let i = 0; i < recipe[0].instructions.length; i++) {
+      for (let i = 0; i < recipe.instructions.length; i++) {
         const element = document.createElement('li')
-        element.innerHTML = recipe[0].instructions[i].toString()
+        element.innerHTML = recipe.instructions[i].toString()
         instructions.appendChild(element)
       }
 
-      recipeName.innerHTML = recipe[0].name
+      // Set images div based on array of ids
+      setImagesOnId(recipe.images)
+
+      recipeName.innerHTML = recipe.name
       recipeDisplay.appendChild(recipeName)
       recipeDisplay.appendChild(ingredientsHeader)
       recipeDisplay.appendChild(ingredients)
@@ -63,64 +63,115 @@ document.getElementById('search-bar').addEventListener('keypress', (event) => {
 }
   })
   .catch(err => console.log(err))
-  console.log(searchName)
   }
 })
 
-document.getElementById('submit').addEventListener('click', () => {
 
-  const recipeName = document.getElementById('name-text').value
-  const imageInput = document.getElementById('image-input')
+document.getElementById('submit').addEventListener('click', async () => {
+  const recipeName = document.getElementById('name-text').value;
+  const imageInput = document.getElementById('image-input');
+  const listOfCategories = [];
+  const listOfImages = [];
+  const checkboxes = document.getElementsByName('checkbox');
+
+  for (let i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].checked) {
+      listOfCategories.push(checkboxes[i].id);
+    }
+  }
+
+  if (imageInput.files.length > 0) {
+    const formData = new FormData();
+    for (let i = 0; i < imageInput.files.length; i++) {
+      formData.append('images', imageInput.files[i]);
+    }
+
+    try {
+      const response = await fetch('/images', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Response from imagerouter", data);
+        for(let i = 0; i < data.length; i++) {
+          listOfImages.push(data[i]._id)
+        }
+
+      } else {
+        console.error('Error uploading images:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error uploading images:', error);
+    }
+  }
 
   const recipeObj = {
     name: recipeName,
     ingredients: ingredients,
-    instructions: instructions
-  }
+    instructions: instructions,
+    categories: listOfCategories,
+    images: listOfImages,
+  };
 
-  fetch('/recipe/', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(recipeObj),
-  })
-  .then(response => response.json())
-
-  if (imageInput.files.length > 0) {
-    const formData = new FormData()
-    for(let i = 0; i < imageInput.files.length; i++) {
-      formData.append('images', imageInput.files[i])
-    }
-
-    fetch('/images', {
+  try {
+    const recipeResponse = await fetch('/recipe/', {
       method: 'POST',
-      body: formData
-  })
-  }
-  document.getElementById('name-text').value = ''
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(recipeObj),
+    });
 
+    if (recipeResponse.ok) {
+      const recipeData = await recipeResponse.json();
+      console.log(recipeData);
+    } else {
+      console.error('Error creating recipe:', recipeResponse.statusText);
+    }
+  } catch (error) {
+    console.error('Error creating recipe:', error);
+  }
+  document.getElementById('name-text').value = '';
 });
 
 const getFoodCategories = () => {
-
   fetch('/categories')
   .then(response => response.json())
   .then(data => {
     const categoryDisplay = document.getElementById('category-list')
-
-    for(let i = 0; i < data.length; i++) {
-      const checkbox = document.createElement('input')
-      checkbox.type = 'checkbox'
-      checkbox.value = data[i].name
-      checkbox.id = data[i].name
-      const label = document.createElement('label')
-      label.htmlFor = data[i].name
-      
-      label.appendChild(document.createTextNode(data[i].name));
+    let iterator = 0
+    for (let i = 0; i < data.length; i++) {
+      const checkbox = document.createElement('p');
+      checkbox.innerHTML = `
+        <label>
+          <input type="checkbox" class="filled-in" value="${data[i].name}" name="checkbox" id="${data[i]._id}"/>
+          <span>${data[i].name}</span>
+        </label>
+      `
       categoryDisplay.appendChild(checkbox);
-      categoryDisplay.appendChild(label);
-
-      categoryDisplay.appendChild(document.createElement('br'))
+      iterator += 1
     }
   })
+}
+
+const setImagesOnId = (IdList) => {
+  const imageDisplay = document.getElementById("images")
+  while (imageDisplay.firstChild) {
+    imageDisplay.removeChild(imageDisplay.firstChild)
+  }
+
+  for (let i = 0; i < IdList.length; i++) {
+    fetch(`/images/${IdList[i]}`)
+    .then(response => response.json())
+    .then(data => {
+      const base64String = btoa(String.fromCharCode.apply(null, data.buffer.data));
+      const imageSrc = `data:image/jpeg;base64,${base64String}`
+      const imgElement = document.createElement('img')
+      imgElement.src = imageSrc
+
+      document.getElementById('images').appendChild(imgElement)
+    })
+  }
 }
