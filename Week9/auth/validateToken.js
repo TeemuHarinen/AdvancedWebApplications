@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 
 module.exports = function(req, res, next) {
-    //code from lecture materials.
     const autHeader = req.headers["authorization"]
     console.log(autHeader);
     let token;

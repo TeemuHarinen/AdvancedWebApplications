@@ -18,7 +18,7 @@ router.get('/authoriz', validateToken, async (req, res, next) => {
   } catch (error) {
     next(error)
   }
-});
+})
 
 router.post("/api/user/register", 
   body("email").isLength({min: 3}).trim().escape().isEmail().normalizeEmail(),
