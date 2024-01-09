@@ -1,3 +1,4 @@
+require('dotenv').config()
 var express = require('express')
 var router = express.Router()
 const bcrypt = require("bcryptjs")
@@ -63,7 +64,7 @@ router.post('/api/user/login',
               jwtPayload,
               process.env.SECRET,
               {
-                expiresIn: 120
+                expiresIn: 180
               },
               (err,token) => {
                 res.json({success: true, token})
@@ -81,13 +82,12 @@ router.post('/api/todos', validateToken, async (req, res, next) => {
     console.log(useerii)
     const todo = req.body.items;
     console.log(todo)
-
-    const existTodo = await Todo.findOne({user:req.user.id})
-    if(existTodo) {
+    const todoFound = await Todo.findOne({user:req.user.id})
+    if(todoFound) {
       for(let i=0; i<req.body.items.length;i++) {
-        existTodo.items.push(req.body.items[i])
+        todoFound.items.push(req.body.items[i])
       }
-      await existTodo.save()
+      await todoFound.save()
     } else {
       await Todo.create({
         user: req.user.id,
