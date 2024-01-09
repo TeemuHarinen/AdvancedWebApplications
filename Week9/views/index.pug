@@ -1,15 +1,11 @@
 extends layout
-
+// Severi Salonen Helped me with pug syntax
 block content
   h1 Welcome to the Index Page
-
     div(id='container')
-
       div(id='unregistered')
-
         a(href="/register.html") Register
         a(href="/login.html") Login
-  
       div(id='registered', style='display: none')
         p(id='email') Logged in as:
         div(id="logoutContainer")
