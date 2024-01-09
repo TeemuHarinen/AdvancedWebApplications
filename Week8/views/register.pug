@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h1 User Registration page
+  
+  form#registrationForm(method="post", action="/api/user/register")
+    label(for="email") Email:
+    input(type="email", id="email", name="email", required)
+    label(for="password") Password:
+    input(type="password", id="password", name="password", required)
+    input(class='btn', type="submit", value="Register")
+  
+  p(id="regError")
+  script(src='/javascripts/register.js') 
