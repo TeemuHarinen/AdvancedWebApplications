@@ -1,21 +1,6 @@
 extends layout
 
 block content
-  h1 Welcome to the Index Page
+  h1= title
+  p Welcome to #{title}
 
-    div(id='container')
-
-      div(id='unregistered')
-
-        a(href="/register.html") Register
-        a(href="/login.html") Login
-  
-      div(id='registered', style='display: none')
-        p(id='email') Logged in as:
-        div(id="logoutContainer")
-        input(type="text", id="add-item", placeholder="Add new Todo...")
-        div(id="todos")
-          h1 All Todos: 
-          ul(id="allTodos")
-
-  script(src='/javascripts/index.js') 
