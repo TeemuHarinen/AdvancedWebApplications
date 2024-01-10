@@ -1,12 +1,11 @@
-import logo from './logo.svg';
-import './App.css';
-import Header from './components/Header';
-import MyContainer from './components/MyContainer';
-import About from './components/About';
-import React, {useState} from 'react';
-import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import './App.css'
+import Header from './components/Header'
+import MyContainer from './components/MyContainer'
+import About from './components/About'
+import React from 'react'
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 
-function App() {
+const App = () => {
   return (
     <Router>
       <Routes>
@@ -14,7 +13,7 @@ function App() {
         <Route path="/about" element={<><Header /><About /></>}/>
       </Routes>
     </Router>
-  );
+  )
 }
 
-export default App;
+export default App

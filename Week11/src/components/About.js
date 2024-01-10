@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 
-function About() {
+const About = () => {
     const [data, setData] = useState([])
     useEffect(() => {
         const fetchData = async () => {
-
-        const resp = await fetch("https://jsonplaceholder.typicode.com/posts")
-        const json = await resp.json();
-        setData(json);
+        const res = await fetch("https://jsonplaceholder.typicode.com/posts")
+        const json = await res.json()
+        setData(json)
       }
-      fetchData();
-    }, []);
+      fetchData()
+    }, [])
 
   return (
     <div>
-        <h1>This is Aboyt</h1>
+        <h1>This is About</h1>
         <ul>
             {data.map((item) => {
                 return (

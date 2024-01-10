@@ -1,10 +1,7 @@
-import { useTranslation } from 'react-i18next';
-
-function MyContainer() {
-const { t, i18n } = useTranslation();
+const MyContainer = () => {
   return (
     <div>
-        <h2>{t('This is the front page')}</h2>
+        <h2>'This is the front page'</h2>
     </div>
   )
 }
